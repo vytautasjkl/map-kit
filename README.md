@@ -9,7 +9,7 @@ Savarankiškas: reikia tik **Bash + Python3**. Jokių išorinių priklausomybių
 ## Diegimas (Linux / Mac / WSL)
 
 ```bash
-tar -xzf map-kit.tar.gz
+git clone https://github.com/vytautasjkl/map-kit.git
 cd map-kit
 ./install.sh
 ```
