@@ -1,0 +1,13 @@
+{
+  "name": "cloudcli-mapas",
+  "displayName": "Žemėlapis",
+  "version": "1.0.0",
+  "description": "Vizualus VISŲ projektų + infrastruktūros žemėlapis iš data.json (mapas). Rodo neon index.html Žemėlapio tab'e.",
+  "author": "",
+  "icon": "icon.svg",
+  "type": "module",
+  "slot": "tab",
+  "entry": "dist/index.js",
+  "server": "dist/server.js",
+  "permissions": []
+}

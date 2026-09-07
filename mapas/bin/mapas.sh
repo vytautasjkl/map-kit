@@ -4,6 +4,10 @@
 #              mapas --print  tik atspausdina medį terminale (be naršyklės)
 set -uo pipefail
 
+# --no-open: sugeneruoja index.html, bet neatidaro naršyklės (naudoja CloudCLI plugin'as)
+NOOPEN=0
+for a in "$@"; do [[ "$a" == "--no-open" ]] && NOOPEN=1; done
+
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DATA="$DIR/data.json"
 OUT="$DIR/index.html"
@@ -178,7 +182,9 @@ document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
 HTMLTAIL
 
 echo "✅ Sugeneruota: $OUT"
-if command -v xdg-open >/dev/null 2>&1; then
+if [[ "$NOOPEN" == "1" ]]; then
+  : # tyliai, be naršyklės
+elif command -v xdg-open >/dev/null 2>&1; then
   ( xdg-open "$OUT" >/dev/null 2>&1 & )
   echo "🌐 Atidaryta naršyklėje."
 else

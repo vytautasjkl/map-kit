@@ -38,6 +38,20 @@ chmod +x "$BIN_DIR/mapas"
 mkdir -p "$DEST_SKILL"
 cp "$HERE/skill/map/SKILL.md" "$DEST_SKILL/SKILL.md"
 
+# 5) CloudCLI (claude-code-ui) „Žemėlapis" tab plugin — jei naudoji web sąsają
+CCUI="$HOME/.claude-code-ui"
+PLUGIN_INSTALLED=0
+if [[ -d "$CCUI" ]]; then
+  DEST_PLUGIN="$CCUI/plugins/cloudcli-mapas"
+  mkdir -p "$DEST_PLUGIN/dist"
+  cp "$HERE/plugin/cloudcli-mapas/manifest.json" "$DEST_PLUGIN/manifest.json"
+  cp "$HERE/plugin/cloudcli-mapas/package.json"  "$DEST_PLUGIN/package.json"
+  cp "$HERE/plugin/cloudcli-mapas/icon.svg"      "$DEST_PLUGIN/icon.svg"
+  cp "$HERE/plugin/cloudcli-mapas/dist/index.js"  "$DEST_PLUGIN/dist/index.js"
+  cp "$HERE/plugin/cloudcli-mapas/dist/server.js" "$DEST_PLUGIN/dist/server.js"
+  PLUGIN_INSTALLED=1
+fi
+
 echo
 echo "✅ Baigta."
 echo "   • Projektas:  $DEST_PROJ"
@@ -49,7 +63,19 @@ if ! echo "$PATH" | tr ':' '\n' | grep -qx "$BIN_DIR"; then
   echo "     export PATH=\"\$HOME/.local/bin:\$PATH\""
   echo "   tada:  source ~/.bashrc"
 fi
+if [[ "$PLUGIN_INSTALLED" == "1" ]]; then
+  echo "   • CloudCLI tab: $CCUI/plugins/cloudcli-mapas  (Žemėlapis)"
+fi
 echo
 echo "▶  Bandyk:  mapas          (atidarys žemėlapį naršyklėje)"
 echo "▶  Arba ClaudeCLI'e:  /map"
 echo "▶  Užpildyk savo duomenimis:  ClaudeCLI'e parašyk  /map  ir  „atnaujink iš mano projektų\""
+if [[ "$PLUGIN_INSTALLED" == "1" ]]; then
+  echo
+  echo "🖥  CloudCLI web sąsajoj atsiras tab'as „Žemėlapis\" — hard-refresh naršyklę (Ctrl+Shift+R)."
+  echo "    (plugin'ai skenuojami gyvai, restart nereikia)"
+else
+  echo
+  echo "ℹ️  CloudCLI (~/.claude-code-ui) nerastas — web tab'as praleistas."
+  echo "    Jei vėliau įsidiegsi CloudCLI, paleisk ./install.sh dar kartą."
+fi
