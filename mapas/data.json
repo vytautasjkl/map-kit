@@ -1,0 +1,51 @@
+{
+  "generated": "2026-01-01",
+  "_schema": "node: {id, label, category, status, address?, path?, tech?, summary, parent?, children?[]}  | category: infra|website|project|business|ai|webapp|tool|system  | status: live|dev|done|idle  | parent = kito node id (medžio vaikas) arba null (šaknis)  | children = paprastų paslaugų vardų sąrašas (stringai)",
+  "nodes": [
+    {
+      "id": "router",
+      "label": "Namų maršrutizatorius",
+      "category": "infra",
+      "status": "live",
+      "address": "192.168.1.1",
+      "tech": "router/firewall",
+      "summary": "PAVYZDYS: tavo tinklo šerdis. Pakeisk savo duomenimis.",
+      "parent": null,
+      "children": ["DHCP", "DNS"]
+    },
+    {
+      "id": "nas",
+      "label": "NAS / serveris",
+      "category": "infra",
+      "status": "live",
+      "address": "192.168.1.10",
+      "path": "/share",
+      "tech": "Docker + nginx",
+      "summary": "PAVYZDYS: failų saugykla, kabo po maršrutizatoriumi.",
+      "parent": "router",
+      "children": []
+    },
+    {
+      "id": "mano-svetaine",
+      "label": "Mano svetainė",
+      "category": "website",
+      "status": "live",
+      "address": "https://pavyzdys.lt",
+      "tech": "React + Vite",
+      "summary": "PAVYZDYS: gyva svetainė. Ištrink šiuos ir surašyk savo.",
+      "parent": null,
+      "children": []
+    },
+    {
+      "id": "irankis-x",
+      "label": "Įrankis X",
+      "category": "tool",
+      "status": "done",
+      "path": "~/projektai/irankis-x",
+      "tech": "Python",
+      "summary": "PAVYZDYS: lokalus CLI įrankis.",
+      "parent": null,
+      "children": []
+    }
+  ]
+}

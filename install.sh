@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# map-kit installer — sudeda „mapas" įrankį + /map ClaudeCLI skill.
+# Naudojimas:  ./install.sh
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEST_PROJ="$HOME/projektai/mapas"
+DEST_SKILL="$HOME/.claude/skills/map"
+BIN_DIR="$HOME/.local/bin"
+
+echo "🗺  map-kit diegimas..."
+
+# 1) Priklausomybės
+command -v bash    >/dev/null || { echo "❌ reikia bash"; exit 1; }
+command -v python3 >/dev/null || { echo "❌ reikia python3 (sudo apt install python3)"; exit 1; }
+
+# 2) mapas projektas (neperrašom esamo data.json jei jau yra)
+mkdir -p "$DEST_PROJ/bin"
+cp "$HERE/mapas/bin/mapas.sh" "$DEST_PROJ/bin/mapas.sh"
+cp "$HERE/mapas/CLAUDE.md"    "$DEST_PROJ/CLAUDE.md"
+chmod +x "$DEST_PROJ/bin/mapas.sh"
+if [[ -f "$DEST_PROJ/data.json" ]]; then
+  echo "ℹ️  Rastas esamas data.json — paliekamas (tavo duomenys saugūs)."
+else
+  cp "$HERE/mapas/data.json" "$DEST_PROJ/data.json"
+  echo "✅ Idetas sablonis data.json (redaguok ranka arba paleisk /map atnaujinima)."
+fi
+
+# 3) `mapas` komanda į PATH
+mkdir -p "$BIN_DIR"
+cat > "$BIN_DIR/mapas" <<EOF
+#!/usr/bin/env bash
+exec "$DEST_PROJ/bin/mapas.sh" "\$@"
+EOF
+chmod +x "$BIN_DIR/mapas"
+
+# 4) /map ClaudeCLI skill
+mkdir -p "$DEST_SKILL"
+cp "$HERE/skill/map/SKILL.md" "$DEST_SKILL/SKILL.md"
+
+echo
+echo "✅ Baigta."
+echo "   • Projektas:  $DEST_PROJ"
+echo "   • Skill:      $DEST_SKILL"
+echo "   • Komanda:    $BIN_DIR/mapas"
+if ! echo "$PATH" | tr ':' '\n' | grep -qx "$BIN_DIR"; then
+  echo
+  echo "⚠️  $BIN_DIR nėra tavo PATH'e. Pridėk į ~/.bashrc:"
+  echo "     export PATH=\"\$HOME/.local/bin:\$PATH\""
+  echo "   tada:  source ~/.bashrc"
+fi
+echo
+echo "▶  Bandyk:  mapas          (atidarys žemėlapį naršyklėje)"
+echo "▶  Arba ClaudeCLI'e:  /map"
+echo "▶  Užpildyk savo duomenimis:  ClaudeCLI'e parašyk  /map  ir  „atnaujink iš mano projektų\""
